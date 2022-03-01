@@ -68,6 +68,7 @@ export default {
             color: #fff
             font-size: .4rem
     .header-fixed
+        z-index: 2
         position: fixed
         left: 0
         top: 0
