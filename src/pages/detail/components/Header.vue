@@ -29,7 +29,8 @@ export default {
   },
   methods: {
     handleScroll () {
-      let top = document.documentElement.scrollTop
+      // 兼容性问题
+      let top = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset
       if (top > 60) {
         let opacity = top / 140
         opacity = opacity > 1 ? 1 : opacity
@@ -42,11 +43,11 @@ export default {
       }
     }
   },
-  activated () {
+  mounted () {
     window.addEventListener('scroll', this.handleScroll)
   },
   // 对事件解除绑定
-  deactivated () {
+  destroyed () {
     window.removeEventListener('scroll', this.handleScroll)
   }
 }
