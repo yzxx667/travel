@@ -81,6 +81,9 @@ export default {
     })
   },
   // 解决bug
+  updated () {
+    this.scroll.refresh()
+  },
   activated () {
     this.scroll.refresh()
   }
