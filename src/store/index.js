@@ -1,11 +1,8 @@
-import Vue from 'vue'
 import Vuex from 'vuex'
 import state from './state'
 import mutations from './mutation'
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
+export default Vuex.createStore({
   state,
   // actions: {
   //   changeCity (ctx, city) {
@@ -19,4 +16,4 @@ export default new Vuex.Store({
   //     return state.city + ' ' + state.city
   //   }
   // }
-})
+});

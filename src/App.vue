@@ -1,10 +1,15 @@
 <template>
   <div id="app">
     <!-- detail不被缓存 -->
-    <keep-alive exclude="Detail">
+    <!-- <keep-alive exclude="Detail">
         <router-view />
-      <router-view/>
-    </keep-alive>
+    </keep-alive> -->
+
+    <router-view v-slot="{ Component }">
+      <keep-alive exclude="Detail">
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </div>
 </template>
 

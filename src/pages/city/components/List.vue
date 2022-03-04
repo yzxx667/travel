@@ -6,7 +6,7 @@
                 <div class="button-list">
                     <div
                     class="button-wrapper">
-                        <div class="button" @click="handleCityClick(currentCity)">{{this.currentCity}}</div>
+                        <div class="button" @click="handleCityClick(currentCity)">{{currentCity}}</div>
                     </div>
                 </div>
             </div>
@@ -26,7 +26,7 @@
             class="area"
             v-for="(item,key) of cities"
             :key="key"
-            :ref="key"
+            :ref="elem => elems[key] = elem"
             >
                 <div class="title border-topbottom">{{key}}</div>
                 <div class="item-list">
@@ -46,7 +46,9 @@
 
 <script>
 import Bscroll from 'better-scroll'
-import { mapState, mapMutations } from 'vuex'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { onActivated, onMounted, onUpdated, ref, watch } from '@vue/runtime-core'
 export default {
   name: 'CityList',
   props: {
@@ -54,39 +56,54 @@ export default {
     cities: Object,
     letter: String
   },
-  computed: {
-    ...mapState({
-      currentCity: 'city'
-    })
-  },
-  methods: {
-    handleCityClick (city) {
+  setup (props) {
+    const store = useStore()
+    const currentCity = store.state.city
+
+    const elems = ref({})
+    const wrapper = ref(null)
+
+
+    const router = useRouter()
+    function handleCityClick (city) {
       // this.$store.commit('changeCity', city)
-      this.changeCity(city)
-      this.$router.push('/')
-    },
-    ...mapMutations(['changeCity'])
-  },
-  watch: {
-    letter () {
-      if (this.letter) {
-        const element = this.$refs[this.letter][0]
-        this.scroll.scrollToElement(element)
-      }
+      store.commit('changeCity', city)
+      router.push('/')
     }
-  },
-  mounted () {
-    this.scroll = new Bscroll(this.$refs.wrapper, {
+
+    watch(() => props.letter,(letter,prevletter) => {
+       if (letter) {
+        const element =elems.value[letter]
+        scroll.scrollToElement(element)
+      }
+    }) 
+
+    onMounted (()=>{
+      scroll = new Bscroll(wrapper.value, {
       click: true
     })
-  },
-  // 解决bug
-  updated () {
-    this.scroll.refresh()
-  },
-  activated () {
-    this.scroll.refresh()
+    })
+    
+    onUpdated (()=>{
+      scroll.refresh()
+    })
+
+    onActivated (()=>{
+       scroll.refresh()
+    })
+    return {
+      currentCity,
+      handleCityClick,
+      elems,
+      wrapper
+    }
   }
+  // mounted () {
+    // this.scroll = new Bscroll(this.$refs.wrapper, {
+    //   click: true
+    // })
+  // },
+  // 解决bug
 }
 </script>
 

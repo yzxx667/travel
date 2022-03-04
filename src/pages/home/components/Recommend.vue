@@ -26,9 +26,6 @@ export default {
   props: {
     list: Array
   },
-  data () {
-    return { }
-  }
 }
 </script>
 
